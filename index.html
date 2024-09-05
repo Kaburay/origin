@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Monitor de Temperatura</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+    <h1>Temperatura del DS18B20</h1>
+    <div id="temperature">Esperando datos...</div>
+
+    <script>
+        const client = mqtt.connect('wss://TU_ENDPOINT_EMQX:8083/mqtt', {
+            username: 'TU_USUARIO',
+            password: 'TU_CONTRASEÑA'
+        });
+
+        client.on('connect', function () {
+            client.subscribe('sensor/temperature');
+        });
+
+        client.on('message', function (topic, message) {
+            document.getElementById('temperature').innerHTML = message.toString() + ' °C';
+        });
+    </script>
+</body>
+</html>
