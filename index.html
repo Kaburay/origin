@@ -2,25 +2,38 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitor de Temperatura</title>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 </head>
 <body>
-    <h1>Temperatura del DS18B20</h1>
-    <div id="temperature">Esperando datos...</div>
+    <h1>Datos de Temperatura</h1>
+    <div>
+        <h2 id="temperature">Conectando...</h2>
+    </div>
 
     <script>
-        const client = mqtt.connect('wss://TU_ENDPOINT_EMQX:8083/mqtt', {
-            username: 'TU_USUARIO',
-            password: 'TU_CONTRASEÑA'
-        });
+        // Conectar al broker MQTT
+        const client = mqtt.connect('wss://broker.emqx.io:8083/mqtt');
 
+        // Cuando la conexión se establezca
         client.on('connect', function () {
-            client.subscribe('sensor/temperature');
+            console.log('Conectado al broker MQTT');
+            // Suscribirse al tema de temperatura
+            client.subscribe('sensor/temperature', function (err) {
+                if (!err) {
+                    console.log('Suscrito al tema sensor/temperature');
+                }
+            });
         });
 
+        // Recibir mensajes
         client.on('message', function (topic, message) {
-            document.getElementById('temperature').innerHTML = message.toString() + ' °C';
+            // Convierte el mensaje a string
+            const temperature = message.toString();
+            console.log(`Temperatura: ${temperature} °C`);
+            // Mostrar la temperatura en un elemento HTML
+            document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
         });
     </script>
 </body>
