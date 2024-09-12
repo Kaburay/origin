@@ -1,0 +1,269 @@
+:root{
+    --primarioOscuro: #262729;
+
+}
+
+
+*{
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    line-height: 1.5;
+
+
+    background-color: black;
+}
+
+/*____________________
+        NAVBAR
+____________________*/
+
+.show{
+    display: flex !important;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+}
+
+nav ul{
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li > a{
+    display: block;
+    position: relative;
+    padding: 20px 15px 10px 15px;
+    text-decoration: none;
+
+    color: white;
+}
+
+nav ul li .link::before{
+    content: "";
+    position: absolute;
+    display: block;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+
+    background-color: white;
+}
+
+nav ul li .link:hover::before{
+    transform: scaleX(1);
+}
+
+nav .more{
+    display: none;
+}
+
+nav .menu{
+    margin-top: 48px;
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    min-width: 200px;
+
+    background-color: white;
+}
+
+nav .menu a{
+    padding: 10px;
+    color: black;
+    text-decoration: none;
+}
+
+nav .menu a:hover {
+    background-color: black;
+    color: white;
+}
+
+
+nav .mobile {
+    display: none;
+    width: 100%;
+
+}
+
+nav .mobile .header {
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    background-color: black;
+}
+
+nav .mobile .header a {
+    color: white;
+    display: inline-flex;
+    text-decoration: none;
+    padding: 10px;
+}
+
+nav .mobile .header #bmenu{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    color: white;
+}
+
+nav .mobile .links {
+    display: none;
+    flex-direction: column;
+    position: relative;
+    z-index: 200;
+
+    /*Color background*/
+}
+
+nav .mobile .links a{
+    font-size: 20px;
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+
+
+    color: white;
+}
+
+nav .mobile .links a:hover{
+    font-size: 20px;
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+
+
+    color: black;
+    background-color: white;
+}
+
+/*____________________
+        HEADER
+____________________*/
+
+header{
+    background-color: var(--primarioOscuro);
+
+    background-size: cover;
+    background-position: center center;
+    height: 100vh;
+
+}
+
+/*____________________
+        BANNER
+____________________*/
+
+#banner {
+    font-size: 1.8em;
+    text-align: center;
+    padding: 40px;
+    width: 500px;
+    position: absolute;
+    z-index: 100;
+    top: 60px;
+    left: 100px;
+    color: white;
+    
+}
+
+/*____________________
+        SIGNOS
+____________________*/
+
+#temp {
+    font-size: 1em;
+    text-align: center;
+    padding: 40px;
+    width: 500px;
+    position: absolute;
+    z-index: 100;
+    top: 60px;
+    left: 700px;
+    color: white;
+
+    
+}
+
+@media screen and (max-width: 1117px){
+    nav .link-hide{
+        display: none;
+    }
+    nav .more{
+        display: flex;
+    }
+    header{
+        height: 5vh;
+    }
+
+    #banner{
+        position: initial !important;
+        background-color: var(--primarioOscuro);
+        background-size: cover;
+        background-position: center;
+        height: 20vh;
+        width: 100%;
+        
+    }
+    #temp{
+        position: initial !important;
+        background-color: var(--primarioOscuro);
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        width: 100%;
+    }
+
+}
+
+@media screen and (max-width: 640px){
+    nav{
+        width: 100%;
+        padding: 0;
+    }
+    nav ul{
+        display: none;
+    }
+    nav .mobile{
+        display: block;
+    }
+
+    header{
+        height: 0vh;
+    }
+
+    #banner{
+        position: initial !important;
+        background-color: var(--primarioOscuro);
+        background-size: cover;
+        background-position: center;
+        height: 15vh;
+        width: 100%;
+    }
+
+    #temp{
+        position: initial !important;
+        background-color: var(--primarioOscuro);
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        width: 100%;
+    }
+}
