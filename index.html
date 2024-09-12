@@ -3,38 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor de Temperatura</title>
+    <title>Monitor Vital</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="src/CSS/main.css">
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 </head>
 <body>
-    <h1>Datos de Temperatura</h1>
-    <div>
-        <h2 id="temperature">Conectando...</h2>
-    </div>
+        <div id="main-container">
+            <header>
+            <nav>
+                <div class="mobile">
+                    <div class="header">
+                        <button id="bmenu">
+                            <span class="material-symbols-outlined">menu</span>
+                        </button>
+                        <a href="#">VitalCheck</a>
+                        <div>
+                            <a href="#"><span class="material-symbols-outlined">account_circle</span></a>
+                            <a href="#"><span class="material-symbols-outlined">shopping_cart</span></a>
+                        </div>
+                    </div>
 
-    <script>
-        // Conectar al broker MQTT
-        const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt');
+                    <div class="links">
+                        <a href="#">Game Pass</a>
+                        <a href="#">Games</a>
+                        <a href="#">Devices</a>
+                        <a href="#">Cloud Gaming</a>
+                        <a href="#">Comunity</a>
+                        <a href="#">Support</a>
+                        <a href="#">My Xbox</a>
+                        <a href="#">All Microsoft</a>
+                        <a href="#">Search</a>
+                    </div>
+                </div>
 
-        // Cuando la conexión se establezca
-        client.on('connect', function () {
-            console.log('Conectado al broker MQTT');
-            // Suscribirse al tema de temperatura
-            client.subscribe('sensor/temperature', function (err) {
-                if (!err) {
-                    console.log('Suscrito al tema sensor/temperature');
-                }
-            });
-        });
+                <ul>
+                    <li><a href="#">VitalCheck</a></li>
+                    <li><a href="#" class="link">Game Pass</a></li>
+                    <li><a href="#" class="link">Games</a></li>
+                    <li><a href="#" class="link link-hide">Devices</a></li>
+                    <li><a href="#" class="link link-hide">Cloud Gaming</a></li>
+                    <li><a href="#" class="link link-hide">Comunity</a></li>
+                    <li><a href="#" class="link link-hide">Support</a></li>
+                    <li><a href="#" class="link link-hide">My Xbox</a></li>
+                    <li class="more">
+                        <a href="#" class="link" id="bmore">Mas</a>
+                        <div class="menu">
+                            <a href="#">Devices</a>
+                            <a href="#">Cloud Gaming</a>
+                            <a href="#">Comunity</a>
+                            <a href="#">Support</a>
+                            <a href="#">My Xbox</a>
+                        </div>
+                    </li>
+                </ul>
 
-        // Recibir mensajes
-        client.on('message', function (topic, message) {
-            // Convierte el mensaje a string
-            const temperature = message.toString();
-            console.log(`Temperatura: ${temperature} °C`);
-            // Mostrar la temperatura en un elemento HTML
-            document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
-        });
-    </script>
+                <ul>
+                    <li><a href="#" class="link">Busqueda</a></li>
+                    <li><a href="#" class="link">Cart</a></li>
+                    <li><a href="#" class="link">Sing In</a></li>
+                </ul>
+            </nav>
+            </header>
+
+            <section id="banner">
+                <h1>Signos Vitales</h1>
+
+
+            </section>
+            <section id="temp">
+                <h1>Temperatura</h1>
+                <div>
+                    <h2 id="temperature">Conectando...</h2>
+                </div>
+                <script>
+                    // Conectar al broker MQTT
+                    const client = mqtt.connect('wss://broker.emqx.io:8083/mqtt');
+            
+                    // Cuando la conexión se establezca
+                    client.on('connect', function () {
+                        console.log('Conectado al broker MQTT');
+                        // Suscribirse al tema de temperatura
+                        client.subscribe('sensor/temperature', function (err) {
+                            if (!err) {
+                                console.log('Suscrito al tema sensor/temperature');
+                            }
+                        });
+                    });
+            
+                    // Recibir mensajes
+                    client.on('message', function (topic, message) {
+                        // Convierte el mensaje a string
+                        const temperature = message.toString();
+                        console.log(`Temperatura: ${temperature} °C`);
+                        // Mostrar la temperatura en un elemento HTML
+                        document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
+                    });
+                </script>
+
+            </section>
+        </div>
+
+        <script src="src/js/main.js"></script>
 </body>
 </html>
