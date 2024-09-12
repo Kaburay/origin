@@ -198,7 +198,32 @@ ____________________*/
     top: 60px;
     left: 700px;
     color: white;
+    
+}
 
+#hr {
+    font-size: 1em;
+    text-align: center;
+    padding: 40px;
+    width: 500px;
+    position: absolute;
+    z-index: 100;
+    top: 200px;
+    left: 700px;
+    color: white;
+    
+}
+
+#spo2 {
+    font-size: 1em;
+    text-align: center;
+    padding: 40px;
+    width: 500px;
+    position: absolute;
+    z-index: 100;
+    top: 340px;
+    left: 700px;
+    color: white;
     
 }
 
@@ -227,7 +252,23 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 100vh;
+        height: 20vh;
+        width: 100%;
+    }
+    #hr{
+        position: initial !important;
+        background-color: var(--primarioOscuro);
+        background-size: cover;
+        background-position: center;
+        height: 20vh;
+        width: 100%;
+    }
+    #spo2{
+        position: initial !important;
+        background-color: var(--primarioOscuro);
+        background-size: cover;
+        background-position: center;
+        height: 50vh;
         width: 100%;
     }
 
@@ -263,7 +304,23 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 100vh;
+        height: 20vh;
+        width: 100%;
+    }
+    #hr{
+        position: initial !important;
+        background-color: var(--primarioOscuro);
+        background-size: cover;
+        background-position: center;
+        height: 20vh;
+        width: 100%;
+    }
+    #spo2{
+        position: initial !important;
+        background-color: var(--primarioOscuro);
+        background-size: cover;
+        background-position: center;
+        height: 50vh;
         width: 100%;
     }
 }
