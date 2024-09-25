@@ -70,30 +70,40 @@
             <section id="temp">
                 <h1>Temperatura</h1>
                 <div>
-                    <h2 id="temperature">Conectando...</h2>
+                    <p>Temperatura actual: <span id="temp">Cargando...</span> °C</p>
                 </div>
                 <script>
+                                // URL del broker
+                    const brokerUrl = "wss://90faf98af2d34db7816605e65327a980.s1.eu.hivemq.cloud:8884/mqtt";
+                    const username = "Kaburay"; // Cambia esto por tu usuario
+                    const password = "ronallml123A#"; // Cambia esto por tu contraseña
+
                     // Conectar al broker MQTT
-                    const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt');
-            
-                    // Cuando la conexión se establezca
+                    const client = mqtt.connect(brokerUrl, {
+                        username: username,
+                        password: password,
+                        protocol: "wss"
+                    });
+                    // Cuando el cliente se conecte
                     client.on('connect', function () {
-                        console.log('Conectado al broker MQTT');
-                        // Suscribirse al tema de temperatura
-                        client.subscribe('sensor/temperature', function (err) {
+                        console.log("Conectado al broker");
+                        client.subscribe('sensor/temperatura', function (err) {
                             if (!err) {
-                                console.log('Suscrito al tema sensor/temperature');
+                                console.log("Suscrito al tópico sensor/temperatura");
                             }
                         });
                     });
-            
+
                     // Recibir mensajes
                     client.on('message', function (topic, message) {
-                        // Convierte el mensaje a string
-                        const temperature = message.toString();
-                        console.log(`Temperatura: ${temperature} °C`);
-                        // Mostrar la temperatura en un elemento HTML
-                        document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
+                        if (topic === 'sensor/temperatura') {
+                            document.getElementById("temp").textContent = message.toString();
+                        }
+                    });
+
+                    // Manejar errores
+                    client.on('error', function (error) {
+                        console.log("Error: ", error);
                     });
                 </script>
 
