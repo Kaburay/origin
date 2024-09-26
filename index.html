@@ -97,7 +97,7 @@
                     // Recibir mensajes
                     client.on('message', function (topic, message) {
                         if (topic === 'sensor/temperatura') {
-                            document.getElementById("temp").textContent = message.toString();
+                            document.getElementById('temperature').textContent = message.toString();
                         }
                     });
 
