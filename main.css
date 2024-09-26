@@ -16,7 +16,7 @@ body {
     line-height: 1.5;
 
 
-    background-color: black;
+    background-color: var(--primarioOscuro);
 }
 
 /*____________________
@@ -167,14 +167,16 @@ header{
 
 }
 
+
+
 /*____________________
         BANNER
 ____________________*/
 
+
 #banner {
     font-size: 1.8em;
     text-align: center;
-    padding: 40px;
     width: 500px;
     position: absolute;
     z-index: 100;
@@ -182,6 +184,14 @@ ____________________*/
     left: 100px;
     color: white;
     
+}
+
+
+.heart-icon {
+    position: relative;
+    bottom: 30px;
+    width: 550px;
+    height: auto;
 }
 
 /*____________________
@@ -201,6 +211,7 @@ ____________________*/
     
 }
 
+
 #hr {
     font-size: 1em;
     text-align: center;
@@ -208,10 +219,9 @@ ____________________*/
     width: 500px;
     position: absolute;
     z-index: 100;
-    top: 200px;
+    top: 290px;
     left: 700px;
     color: white;
-    
 }
 
 #spo2 {
@@ -221,13 +231,13 @@ ____________________*/
     width: 500px;
     position: absolute;
     z-index: 100;
-    top: 340px;
+    top: 520px;
     left: 700px;
     color: white;
     
 }
 
-@media screen and (max-width: 1117px){
+@media screen and (max-width: 1159px){
     nav .link-hide{
         display: none;
     }
@@ -247,6 +257,25 @@ ____________________*/
         width: 100%;
         
     }
+
+    .card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .heart-icon{
+        position: fixed;
+        top: 45px;
+        right: 45px;
+        width: 190px;
+        height: auto;
+    }
+
+    .card h1{
+        margin-right: 30px;
+    }
+
     #temp{
         position: initial !important;
         background-color: var(--primarioOscuro);
@@ -268,13 +297,13 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 50vh;
+        height: 100%;
         width: 100%;
     }
 
 }
 
-@media screen and (max-width: 640px){
+@media screen and (max-width: 768px){
     nav{
         width: 100%;
         padding: 0;
@@ -295,8 +324,25 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
+        padding-top: 10px;
         height: 15vh;
         width: 100%;
+    }
+
+    .card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .heart-icon{
+        position: initial;
+        width: 50px;
+        height: auto;
+    }
+
+    .card h1{
+        margin-right: 10px;
     }
 
     #temp{
