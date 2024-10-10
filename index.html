@@ -107,9 +107,15 @@
                     // Recibir mensajes
                     client.on('message', function (topic, message) {
                         if (topic === 'sensor/datos') {
-                            const temperature = message.toString();
+                            const data = JSON.parse(message.toString()); // Convertir el mensaje en JSON
+                            const temperature = data.temperatura; // Extraer la temperatura
+                            const spo2 = data.spo2; // Extraer el spo2
                             console.log(`Temperatura: ${temperature} °C`);
+                            console.log(`SpO2: ${spo2}%`);
+                            
+                            // Actualizar los elementos en la página
                             document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
+                            document.getElementById('sp').innerText = `Saturación de Oxígeno: ${spo2}%`;
                         }
                     });
 
