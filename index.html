@@ -97,16 +97,16 @@
                     // Cuando el cliente se conecte
                     client.on('connect', function () {
                         console.log("Conectado al broker");
-                        client.subscribe('sensor/temperatura', function (err) {
+                        client.subscribe('sensor/datos', function (err) {
                             if (!err) {
-                                console.log("Suscrito al tópico sensor/temperatura");
+                                console.log("Suscrito al tópico sensor/datos");
                             }
                         });
                     });
 
                     // Recibir mensajes
                     client.on('message', function (topic, message) {
-                        if (topic === 'sensor/temperatura') {
+                        if (topic === 'sensor/datos') {
                             const temperature = message.toString();
                             console.log(`Temperatura: ${temperature} °C`);
                             document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
