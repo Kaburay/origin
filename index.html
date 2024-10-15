@@ -110,12 +110,15 @@
                             const data = JSON.parse(message.toString()); // Convertir el mensaje en JSON
                             const temperature = data.temperatura; // Extraer la temperatura
                             const spo2 = data.spo2; // Extraer el spo2
+                            const hr = data.bpm; // Extraer el bpm
                             console.log(`Temperatura: ${temperature} °C`);
                             console.log(`SpO2: ${spo2}%`);
+                            console.log(`BPM: ${hr}`);
                             
                             // Actualizar los elementos en la página
                             document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
                             document.getElementById('sp').innerText = `Saturación de Oxígeno: ${spo2}%`;
+                            document.getElementById('heartrate').innerText = `BPM: ${hr}%`;
                         }
                     });
 
