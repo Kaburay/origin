@@ -82,6 +82,8 @@
                 <div>
                     <h3 id="temperature">Conectando...</h3>
                 </div>
+                <progress id="file" max="40" value="50">70%</progress>
+                
                 <script>
                                 // URL del broker
                     const brokerUrl = "wss://90faf98af2d34db7816605e65327a980.s1.eu.hivemq.cloud:8884/mqtt";
@@ -119,6 +121,9 @@
                             document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
                             document.getElementById('sp').innerText = `Saturación de Oxígeno: ${spo2}%`;
                             document.getElementById('heartrate').innerText = `BPM: ${hr}`;
+
+                            const progressBar = document.getElementById('file');
+                            progressBar.value = temperature;
                         }
                     });
 
