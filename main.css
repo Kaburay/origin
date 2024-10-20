@@ -167,8 +167,6 @@ header{
 
 }
 
-
-
 /*____________________
         BANNER
 ____________________*/
@@ -212,6 +210,7 @@ ____________________*/
 }
 
 
+
 #hr {
     font-size: 1em;
     text-align: center;
@@ -253,7 +252,7 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 20vh;
+        height: 12vh;
         width: 100%;
         
     }
@@ -281,7 +280,7 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 20vh;
+        height: 27vh;
         width: 100%;
     }
     #hr{
@@ -289,7 +288,7 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 20vh;
+        height: 25vh;
         width: 100%;
     }
     #spo2{
@@ -325,7 +324,7 @@ ____________________*/
         background-size: cover;
         background-position: center;
         padding-top: 10px;
-        height: 15vh;
+        height: 12vh;
         width: 100%;
     }
 
@@ -350,7 +349,7 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 20vh;
+        height: 27vh;
         width: 100%;
     }
     #hr{
@@ -358,7 +357,7 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 20vh;
+        height: 25vh;
         width: 100%;
     }
     #spo2{
@@ -366,7 +365,7 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        height: 50vh;
+        height: 100%;
         width: 100%;
     }
 }
