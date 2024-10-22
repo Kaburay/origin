@@ -68,94 +68,271 @@
                     <h1>Signos Vitales</h1>
                     <img src="corzn.png" class="heart-icon">
                 </div>
-
-
             </section>
 
 
             
             <section id="temp">
-                <span class="material-symbols-outlined">
-                    thermostat
-                </span>
-                <h1>Temperatura</h1>
-                <div>
-                    <h3 id="temperature">Conectando...</h3>
+                <div class="title-temp">
+                    <span class="material-symbols-outlined">thermostat</span>
+                    <h1>Temperatura</h1>
                 </div>
-                <progress id="file" max="40" value="10">70%</progress>
+
+                <div class="estado-temp">
+                    <h3 id="temperature">Conectando</h3>
+                    
+                    <div class="loading" id="ld-anim-temp">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
                 
-                <script>
-                                // URL del broker
-                    const brokerUrl = "wss://90faf98af2d34db7816605e65327a980.s1.eu.hivemq.cloud:8884/mqtt";
-                    const username = "Kaburay"; // Cambia esto por tu usuario
-                    const password = "ronallml123A#"; // Cambia esto por tu contraseña
-
-                    // Conectar al broker MQTT
-                    const client = mqtt.connect(brokerUrl, {
-                        username: username,
-                        password: password,
-                        protocol: "wss"
-                    });
-                    // Cuando el cliente se conecte
-                    client.on('connect', function () {
-                        console.log("Conectado al broker");
-                        client.subscribe('sensor/datos', function (err) {
-                            if (!err) {
-                                console.log("Suscrito al tópico sensor/datos");
-                            }
-                        });
-                    });
-
-                    // Recibir mensajes
-                    client.on('message', function (topic, message) {
-                        if (topic === 'sensor/datos') {
-                            const data = JSON.parse(message.toString()); // Convertir el mensaje en JSON
-                            const temperature = data.temperatura; // Extraer la temperatura
-                            const spo2 = data.spo2; // Extraer el spo2
-                            const hr = data.bpm; // Extraer el bpm
-                            console.log(`Temperatura: ${temperature} °C`);
-                            console.log(`SpO2: ${spo2}%`);
-                            console.log(`BPM: ${hr}`);
-                            
-                            // Actualizar los elementos en la página
-                            document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
-                            document.getElementById('sp').innerText = `Saturación de Oxígeno: ${spo2}%`;
-                            document.getElementById('heartrate').innerText = `BPM: ${hr}`;
-
-                            const progressBar = document.getElementById('file');
-                            progressBar.value = temperature;
-                        }
-                    });
-
-                    // Manejar errores
-                    client.on('error', function (error) {
-                        console.log("Error: ", error);
-                    });
-                </script>
+                <progress id="bar" value="30" max="40">70%</progress>
 
             </section>
-
+                                
             <section id="hr">
-                <span class="material-symbols-outlined">
-                    vital_signs
-                </span>
-                <h1>Frecuencia Cardiaca</h1>
-                <div>
-                    <h3 id="heartrate">Conectando...</h3>
+                <div class="title-hr">
+                    <span class="material-symbols-outlined">vital_signs</span>
+                    <h1>Frecuencia Cardiaca</h1>
                 </div>
-
+        
+                <div class="estado-hr">
+                    <h3 id="heartrate">Conectando</h3>
+                    <div class="loading" id="ld-anim-hr">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
             </section>
 
             <section id="spo2">
-                <span class="material-symbols-outlined">
-                    favorite
-                </span>
-                <h1>Saturacion de Oxigeno</h1>
-                <div>
-                    <h3 id="sp">Conectando...</h3>
+                <div class="title-sp">
+                    <span class="material-symbols-outlined">
+                        favorite
+                    </span>
+                    <h1>Saturacion de Oxigeno</h1>
+                </div>
+                
+                <div class="estado-sp">
+                    <h3 id="sp">Conectando</h3>
+                    <div class="loading" id="ld-anim-sp">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
 
             </section>
+
+            <script type="module">
+                // Importar los módulos necesarios de Firebase
+                import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+                import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+                
+                // Tu configuración de Firebase
+                const firebaseConfig = {
+                    apiKey: "AIzaSyBCkbvoAMKi6yl1CC38Zx8uJ--dM0JandY",
+                    authDomain: "signosvitalesdb.firebaseapp.com",
+                    projectId: "signosvitalesdb",
+                    storageBucket: "signosvitalesdb.appspot.com",
+                    messagingSenderId: "978734669906",
+                    appId: "1:978734669906:web:27933a7d4770a5bb037f8b",
+                    measurementId: "G-W80TBWZY2L"
+                };
+
+                // Inicializar Firebase
+                const app = initializeApp(firebaseConfig);
+                const db = getFirestore(app);
+
+                // Función para enviar los datos a Firestore
+                async function enviarDatosAFirebase(temperature, spo2, hr) {
+                    try {
+                        await addDoc(collection(db, "vital_sings"), {
+                            temperature: temperature,
+                            spo2: spo2,
+                            bpm: hr,
+                            timestamp: serverTimestamp()
+                        });
+                        console.log("Datos guardados en Firestore");
+                    } catch (e) {
+                        console.error("Error al enviar los datos a Firestore: ", e);
+                    }
+                }
+
+                // URL del broker
+                const brokerUrl = "wss://90faf98af2d34db7816605e65327a980.s1.eu.hivemq.cloud:8884/mqtt";
+                const username = "Kaburay"; // Cambia esto por tu usuario
+                const password = "ronallml123A#"; // Cambia esto por tu contraseña
+
+                // Conectar al broker MQTT
+                const client = mqtt.connect(brokerUrl, {
+                    username: username,
+                    password: password,
+                    protocol: "wss"
+                });
+
+
+                // Variable para el temporizador
+                let timeoutHandle;
+
+                // Función para volver a "Conectando" si no se reciben datos
+                function setToConnecting() {
+                    document.getElementById('sp').innerText = "Conectando";
+                    document.getElementById('ld-anim-sp').classList.remove("hidden");
+                    document.getElementById('temperature').innerText = "Conectando"; // Limpiar otros datos
+                    document.getElementById('ld-anim-temp').classList.remove("hidden");
+                    document.getElementById('heartrate').innerText = "Conectando";
+                    document.getElementById('ld-anim-hr').classList.remove("hidden");
+                }
+
+                // Cuando el cliente se conecte
+                client.on('connect', function () {
+                    console.log("Conectado al broker");
+                    client.subscribe('sensor/datos', function (err) {
+                        if (!err) {
+                            console.log("Suscrito al tópico sensor/datos");
+                        }
+                    });
+                });
+
+                // Recibir mensajes
+                client.on('message', function (topic, message) {
+                    if (topic === 'sensor/datos') {
+                        clearTimeout(timeoutHandle); // Reiniciar el temporizador cuando se reciban datos
+
+                        const data = JSON.parse(message.toString()); // Convertir el mensaje en JSON
+                        const temperature = data.temperatura; // Extraer la temperatura
+                        const spo2 = data.spo2; // Extraer el spo2
+                        const hr = data.bpm; // Extraer el bpm
+                        
+                        console.log(`Temperatura: ${temperature} °C`);
+                        console.log(`SpO2: ${spo2}%`);
+                        console.log(`BPM: ${hr}`);
+                        
+                        // Actualizar los elementos en la página
+                        document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
+                        document.getElementById('sp').innerText = `Saturación de Oxígeno: ${spo2}%`;
+                        document.getElementById('heartrate').innerText = `BPM: ${hr}`;
+
+                        const progressBar = document.getElementById('bar');
+                        progressBar.value = temperature;
+
+                        // Ocultar la animación de carga una vez recibidos los datos
+                        document.getElementById('ld-anim-temp').classList.add("hidden");
+                        document.getElementById('ld-anim-hr').classList.add("hidden");
+                        document.getElementById('ld-anim-sp').classList.add("hidden");
+
+                        // Guardar los datos en Firebase
+                        enviarDatosAFirebase(temperature, spo2, hr);
+
+                        // Iniciar el temporizador de nuevo (si no se reciben datos en 5 segundos, mostrar "Conectando")
+                        timeoutHandle = setTimeout(setToConnecting, 5000); // 5000 milisegundos = 5 segundos
+                    }
+                });
+
+                // Manejar errores
+                client.on('error', function (error) {
+                    console.log("Error: ", error);
+                });
+            </script>
+
+            <section id="batabase">
+                <h1>Historial</h1>
+                <table class="content-table">
+                    <thead>
+                        <tr>
+                            <th>Temperatura (°C)</th>
+                            <th>SpO2 (%)</th>
+                            <th>BPM</th>
+                            <th>Fecha y Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table">
+                        <!-- Aquí se insertarán las filas dinámicamente -->
+                    </tbody>
+                </table>
+            </section>
+
+            <script type="module">
+                // Importar los módulos necesarios de Firebase
+                import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+                import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+                // Tu configuración de Firebase
+                const firebaseConfig2 = {
+                    apiKey: "AIzaSyBCkbvoAMKi6yl1CC38Zx8uJ--dM0JandY",
+                    authDomain: "signosvitalesdb.firebaseapp.com",
+                    projectId: "signosvitalesdb",
+                    storageBucket: "signosvitalesdb.appspot.com",
+                    messagingSenderId: "978734669906",
+                    appId: "1:978734669906:web:27933a7d4770a5bb037f8b",
+                    measurementId: "G-W80TBWZY2L"
+                };
+
+                // Inicializar Firebase
+                const app2 = initializeApp(firebaseConfig2);
+                const db2 = getFirestore(app2);
+
+                // Referencia a la colección 'vital_sings'
+                const vitalSignsRef = collection(db2, "vital_sings");
+
+                // Consulta para obtener los últimos 20 datos ordenados por timestamp
+                const q = query(vitalSignsRef, orderBy("timestamp", "desc"), limit(20));
+
+                // Función para formatear la fecha
+                function formatDate(timestamp) {
+                    const date = timestamp.toDate();
+                    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+                }
+
+                // Función para actualizar la tabla con los datos
+                function actualizarTabla(datos) {
+                    const tabla = document.getElementById("data-table");
+                    tabla.innerHTML = ""; // Limpiar la tabla antes de añadir nuevas filas
+
+                    datos.forEach((doc) => {
+                        const data = doc.data();
+                        const row = document.createElement("tr");
+
+                        const tempCell = document.createElement("td");
+                        tempCell.textContent = `${data.temperature} °C`;
+
+                        const spo2Cell = document.createElement("td");
+                        spo2Cell.textContent = `${data.spo2}%`;
+
+                        const bpmCell = document.createElement("td");
+                        bpmCell.textContent = data.bpm;
+
+                        const timeCell = document.createElement("td");
+                        timeCell.textContent = formatDate(data.timestamp);
+
+                        row.appendChild(tempCell);
+                        row.appendChild(spo2Cell);
+                        row.appendChild(bpmCell);
+                        row.appendChild(timeCell);
+
+                        tabla.appendChild(row);
+                    });
+                }
+
+                // Escuchar cambios en tiempo real y actualizar la tabla
+                onSnapshot(q, (snapshot) => {
+                    const datos = snapshot.docs;
+                    actualizarTabla(datos);
+                });
+
+            </script>
+
+           
         </div>
 
         <script src="main.js"></script>
