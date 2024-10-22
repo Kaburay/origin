@@ -30,6 +30,27 @@
     color: black;
     background-color: white;
   }
+  .loading {
+    --speed-of-animation: 0.9s;
+    --gap: 6px;
+    --first-color: black;
+    --second-color: black;
+    --third-color: black;
+    --fourth-color: black;
+    --fifth-color: black;
+   }
+  .material-symbols-outlined {
+    color: black;
+  }
+  #batabase {
+    color: black;
+  }
+
+  .content-table { border-collapse: collapse; margin: 25px 0; font-size: 1em; font-family: sans-serif; min-width: 550px; box-shadow: 0 0 20px rgba(0, 0, 0, 2); }
+  .content-table thead tr { background-color: #828283; color: black; text-align: middle; }
+  .content-table th, .content-table td { padding: 12px 15px; }
+  .content-table tbody tr { border-bottom: 1px solid #635c5ca1; } .content-table tbody tr:nth-of-type(even) { background-color: white; } .content-table tbody tr:last-of-type { border-bottom: 2px solid black; }
+
   nav .mobile .header {
     color: black;
     background-color: rgba(255, 255, 255, 0.9);
