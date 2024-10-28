@@ -180,6 +180,24 @@
                     protocol: "wss"
                 });
 
+                                // Función para enviar correo electrónico
+                (function() {
+                    emailjs.init("service_7zrm2bl");  // Reemplaza con tu User ID de EmailJS
+                })();
+                function enviarCorreo() {
+                    emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                        emailjs_name: "Dr. Vinicius",
+                        emailjs_email: "VitalCheck",
+                        emailjs_message: "La temperatura alcanzo los 38 C",
+                    })
+                    .then(response => {
+                        console.log("Correo enviado!", response.status, response.text);
+                    })
+                    .catch(error => {
+                        console.error("Error al enviar correo:", error);
+                    });
+                }   
+
 
                 // Variable para el temporizador
                 let timeoutHandle;
@@ -233,6 +251,10 @@
 
                         // Guardar los datos en Firebase
                         enviarDatosAFirebase(temperature, spo2, hr);
+
+                        if (temperature >= 38) {
+                            enviarNotificacion(); // Llamar a la función para enviar un correo
+                        }
 
                         // Iniciar el temporizador de nuevo (si no se reciben datos en 5 segundos, mostrar "Conectando")
                         timeoutHandle = setTimeout(setToConnecting, 5000); // 5000 milisegundos = 5 segundos
