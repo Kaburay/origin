@@ -252,7 +252,7 @@
                         // Guardar los datos en Firebase
                         enviarDatosAFirebase(temperature, spo2, hr);
 
-                        if (temperature >= 38) {
+                        if (temperature >= 30) {
                             enviarNotificacion(); // Llamar a la función para enviar un correo
                         }
 
