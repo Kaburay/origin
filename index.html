@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="scheme.css">
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init('vw9DreNbhjL06eFw5'); // Reemplaza "YOUR_USER_ID" con tu propio User ID de EmailJS
+        })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
         <div id="main-container">
@@ -67,20 +77,20 @@
                 <div class="card">
                     <h1>Signos Vitales</h1>
                     <img src="corzn.png" class="heart-icon">
+                    <div id="ecg-container">
+                        <canvas id="ecgChart" width="400" height="200"></canvas>
+                    </div>
                 </div>
             </section>
-
-
             
             <section id="temp">
                 <div class="title-temp">
-                    <span class="material-symbols-outlined">thermostat</span>
+                    <img src="temperatura.svg" alt="Temperatura" class="icon">
                     <h1>Temperatura</h1>
                 </div>
 
                 <div class="estado-temp">
-                    <h3 id="temperature">Conectando</h3>
-                    
+                    <h3 id="temperature">Conectando</h3>             
                     <div class="loading" id="ld-anim-temp">
                         <span></span>
                         <span></span>
@@ -89,6 +99,22 @@
                         <span></span>
                     </div>
                 </div>
+
+                <section id="temp-container">
+                    <div class="tgraf">
+                        <canvas id="tempChart" width="50" height="250"></canvas>
+                    </div>
+                    
+                    <div class="tdato">
+                        <div class="loading2" id="ld-anim-temp2">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </section>
                 
                 <progress id="bar" value="30" max="40">70%</progress>
 
@@ -96,8 +122,8 @@
                                 
             <section id="hr">
                 <div class="title-hr">
-                    <span class="material-symbols-outlined">vital_signs</span>
-                    <h1>Frecuencia Cardiaca</h1>
+                    <img src="cardiaco.svg" alt="Frecuencia" class="icon">
+                    <h1>Frecuencia Cardíaca</h1>
                 </div>
         
                 <div class="estado-hr">
@@ -110,14 +136,29 @@
                         <span></span>
                     </div>
                 </div>
+
+                <section id="hr-container">
+                    <div class="hrgraf">
+                        <canvas id="hrChart" width="50" height="250"></canvas>
+                    </div>
+                    
+                    <div class="hrdato">
+                        <div class="loading2" id="ld-anim-hr2">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </section>
+
             </section>
 
             <section id="spo2">
                 <div class="title-sp">
-                    <span class="material-symbols-outlined">
-                        favorite
-                    </span>
-                    <h1>Saturacion de Oxigeno</h1>
+                    <img src="src/img/sangre.svg" alt="SPO2" class="icon">
+                    <h1>Saturación de Oxígeno</h1>
                 </div>
                 
                 <div class="estado-sp">
@@ -129,6 +170,30 @@
                         <span></span>
                         <span></span>
                     </div>
+                </div>
+
+                <section id="sp-container">
+                    <div class="spgraf">
+                        <canvas id="spChart" width="50" height="250"></canvas>
+                    </div>
+                    
+                    <div class="spdato">
+                        <div class="loading2" id="ld-anim-sp2">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </section>
+
+            </section>
+
+            <section id="PPG">
+                
+                <div class="estado-ir">
+                    <h3 id="ir">Conectando</h3>
                 </div>
 
             </section>
@@ -152,6 +217,10 @@
                 // Inicializar Firebase
                 const app = initializeApp(firebaseConfig);
                 const db = getFirestore(app);
+
+                // Variable para el cooldown
+                let alertCooldown = false;
+                const cooldownTime = 60000; // 1 minuto en milisegundos
 
                 // Función para enviar los datos a Firestore
                 async function enviarDatosAFirebase(temperature, spo2, hr) {
@@ -183,7 +252,7 @@
                 // Variable para el temporizador
                 let timeoutHandle;
 
-                // Función para volver a "Conectando" si no se reciben datos
+                // Función de Conectar de nuevo
                 function setToConnecting() {
                     document.getElementById('sp').innerText = "Conectando";
                     document.getElementById('ld-anim-sp').classList.remove("hidden");
@@ -191,8 +260,172 @@
                     document.getElementById('ld-anim-temp').classList.remove("hidden");
                     document.getElementById('heartrate').innerText = "Conectando";
                     document.getElementById('ld-anim-hr').classList.remove("hidden");
+                    ldAnimTemp.innerHTML = animHTML;
+                    ldAnimHr.innerHTML = animHTML2;
+                    ldAnimSp.innerHTML = animHTML3;
                 }
 
+                // Función para enviar alerta por email
+
+                function verificarTemperatura(temperature) {
+                    if (temperature >= 41 && temperature <= 80 && !alertCooldown) {
+                        emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                            emailjs_name: "Dr. Pepinillo",
+                            emailjs_email: "Temperatura",
+                            emailjs_message: `Alerta: La temperatura ha alcanzado ${temperature} °C grados.`,
+                        })
+                        .then(response => {
+                            console.log("Correo de alerta enviado:", response.status, response.text);
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar el correo:", error);
+                        });
+
+                        // Activar cooldown
+                        alertCooldown = true;
+                        setTimeout(() => {
+                            alertCooldown = false; // Resetear cooldown después de 1 minuto
+                        }, cooldownTime);
+                    }
+                    if (temperature >= 39.5 && temperature <= 80 && !alertCooldown) {
+                        emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                            emailjs_name: "Dr. Pepinillo",
+                            emailjs_email: "Temperatura",
+                            emailjs_message: `Alerta: La temperatura ha alcanzado ${temperature} °C grados.`,
+                        })
+                        .then(response => {
+                            console.log("Correo de alerta enviado:", response.status, response.text);
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar el correo:", error);
+                        });
+
+                        // Activar cooldown
+                        alertCooldown = true;
+                        setTimeout(() => {
+                            alertCooldown = false; // Resetear cooldown después de 1 minuto
+                        }, cooldownTime);
+                    }
+                    if (temperature >= 37.5 && temperature <= 80 && !alertCooldown) {
+                        emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                            emailjs_name: "Dr. Pepinillo",
+                            emailjs_email: "Temperatura",
+                            emailjs_message: `Alerta: La temperatura ha alcanzado ${temperature} °C grados.`,
+                        })
+                        .then(response => {
+                            console.log("Correo de alerta enviado:", response.status, response.text);
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar el correo:", error);
+                        });
+
+                        // Activar cooldown
+                        alertCooldown = true;
+                        setTimeout(() => {
+                            alertCooldown = false; // Resetear cooldown después de 1 minuto
+                        }, cooldownTime);
+                    }
+                }
+                function verificarPBM(hr) {
+                    if (hr >= 100 && hr <= 200 && !alertCooldown) {
+                        emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                            emailjs_name: "Dr. Pepinillo",
+                            emailjs_email: "Frecuencia Cardiaca",
+                            emailjs_message: `Alerta: La frecuencia cardiaca ha alcanzado ${hr} BPM.`,
+                        })
+                        .then(response => {
+                            console.log("Correo de alerta enviado:", response.status, response.text);
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar el correo:", error);
+                        });
+
+                        // Activar cooldown
+                        alertCooldown = true;
+                        setTimeout(() => {
+                            alertCooldown = false; // Resetear cooldown después de 1 minuto
+                        }, cooldownTime);  
+                    }
+                    if (hr >= 110 && hr <= 200 && !alertCooldown) {
+                        emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                            emailjs_name: "Dr. Pepinillo",
+                            emailjs_email: "Frecuencia Cardiaca",
+                            emailjs_message: `Alerta: La frecuencia cardiaca ha alcanzado ${hr} BPM.`,
+                        })
+                        .then(response => {
+                            console.log("Correo de alerta enviado:", response.status, response.text);
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar el correo:", error);
+                        });
+
+                        // Activar cooldown
+                        alertCooldown = true;
+                        setTimeout(() => {
+                            alertCooldown = false; // Resetear cooldown después de 1 minuto
+                        }, cooldownTime);  
+                    } 
+                }
+                function verificarSPO2(spo2) {
+                    if (spo2 <= 95 && ir >= 3000 && !alertCooldown) {
+                        emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                            emailjs_name: "Dr. Pepinillo",
+                            emailjs_email: "Saturacion de Oxigeno",
+                            emailjs_message: `Alerta: El SPO2 ha alcanzado ${spo2}%.`,
+                        })
+                        .then(response => {
+                            console.log("Correo de alerta enviado:", response.status, response.text);
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar el correo:", error);
+                        });
+
+                        // Activar cooldown
+                        alertCooldown = true;
+                        setTimeout(() => {
+                            alertCooldown = false; // Resetear cooldown después de 1 minuto
+                        }, cooldownTime);  
+                    }
+                    if (spo2 <= 90 && ir >= 3000 && !alertCooldown) {
+                        emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                            emailjs_name: "Dr. Pepinillo",
+                            emailjs_email: "Saturacion de Oxigeno",
+                            emailjs_message: `Alerta: El SPO2 ha alcanzado ${spo2}%.`,
+                        })
+                        .then(response => {
+                            console.log("Correo de alerta enviado:", response.status, response.text);
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar el correo:", error);
+                        });
+
+                        // Activar cooldown
+                        alertCooldown = true;
+                        setTimeout(() => {
+                            alertCooldown = false; // Resetear cooldown después de 1 minuto
+                        }, cooldownTime);  
+                    }
+                    if (spo2 <= 85 && ir >= 3000 && !alertCooldown) {
+                        emailjs.send("service_7zrm2bl", "template_ey5ctlh", {
+                            emailjs_name: "Dr. Pepinillo",
+                            emailjs_email: "Saturacion de Oxigeno",
+                            emailjs_message: `Alerta: El SPO2 ha alcanzado ${spo2}%.`,
+                        })
+                        .then(response => {
+                            console.log("Correo de alerta enviado:", response.status, response.text);
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar el correo:", error);
+                        });
+
+                        // Activar cooldown
+                        alertCooldown = true;
+                        setTimeout(() => {
+                            alertCooldown = false; // Resetear cooldown después de 1 minuto
+                        }, cooldownTime);  
+                    }
+                    
+                }
                 // Cuando el cliente se conecte
                 client.on('connect', function () {
                     console.log("Conectado al broker");
@@ -201,8 +434,22 @@
                             console.log("Suscrito al tópico sensor/datos");
                         }
                     });
+                    // Suscribirse al tópico sensor/ecg
+                    client.subscribe('sensor/ecg', function (err) {
+                        if (!err) {
+                            console.log("Suscrito al tópico sensor/ecg");
+                        }
+                    });
                 });
 
+  
+                let ir;
+                var ldAnimTemp = document.getElementById('ld-anim-temp2');
+                var animHTML = document.getElementById('ld-anim-temp2').innerHTML;
+                var ldAnimHr = document.getElementById('ld-anim-hr2');
+                var animHTML2 = document.getElementById('ld-anim-hr2').innerHTML;
+                var ldAnimSp = document.getElementById('ld-anim-sp2');
+                var animHTML3 = document.getElementById('ld-anim-sp2').innerHTML;
                 // Recibir mensajes
                 client.on('message', function (topic, message) {
                     if (topic === 'sensor/datos') {
@@ -213,14 +460,17 @@
                         const spo2 = data.spo2; // Extraer el spo2
                         const hr = data.bpm; // Extraer el bpm
                         
+                        
                         console.log(`Temperatura: ${temperature} °C`);
                         console.log(`SpO2: ${spo2}%`);
                         console.log(`BPM: ${hr}`);
+                        console.log(`IR: ${ir}`);
                         
                         // Actualizar los elementos en la página
                         document.getElementById('temperature').innerText = `Temperatura: ${temperature} °C`;
                         document.getElementById('sp').innerText = `Saturación de Oxígeno: ${spo2}%`;
                         document.getElementById('heartrate').innerText = `BPM: ${hr}`;
+                        document.getElementById('ir').innerText = `IR: ${ir}`;
 
                         const progressBar = document.getElementById('bar');
                         progressBar.value = temperature;
@@ -230,12 +480,37 @@
                         document.getElementById('ld-anim-hr').classList.add("hidden");
                         document.getElementById('ld-anim-sp').classList.add("hidden");
 
+                        
+                        
+                        ldAnimTemp.innerHTML = '<h3>' + temperature + ' </h3><h4>°</h4>';
+                        ldAnimHr.innerHTML = '<h3>' + hr + ' </h3><h6> BPM</h6>';
+                        ldAnimSp.innerHTML = '<h3>' + spo2 + ' %</h3>';
+
+                        actualizarGraficaTemperatura(temperature)
+                        actualizarGraficaHr(hr)
+                        actualizarGraficaSp(spo2)
+
                         // Guardar los datos en Firebase
-                        enviarDatosAFirebase(temperature, spo2, hr);
+                    
+                        if (temperature <= 80) {
+                            enviarDatosAFirebase(temperature, spo2, hr);
+                            verificarTemperatura(temperature);
+                        }
 
                         // Iniciar el temporizador de nuevo (si no se reciben datos en 5 segundos, mostrar "Conectando")
                         timeoutHandle = setTimeout(setToConnecting, 5000); // 5000 milisegundos = 5 segundos
+                    } else if (topic === 'sensor/ecg') {
+                        const ecgData = JSON.parse(message.toString()); // Convertir el mensaje en JSON
+                        const ir = ecgData.ecg;  // Extraer el valor de ECG
+                        
+                        console.log(`PPG: ${ir}`);
+
+                        
+                        // Actualizar el elemento en la página
+                        document.getElementById('ir').innerText = `PPG: ${ir}`;
+                        actualizarGrafica(ir);
                     }
+
                 });
 
                 // Manejar errores
