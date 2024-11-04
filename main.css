@@ -710,7 +710,7 @@ ____________________*/
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        padding-top: 25px;
+        padding-top: 10px;
         height: 13vh;
         width: 100%;
     }
