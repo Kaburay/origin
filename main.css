@@ -753,35 +753,35 @@ ____________________*/
         background-size: cover;
         background-position: center;
         left: 1%;
-        top: 190px;
-        width: 230px;
+        top: 120px;
+        width: 98%;
     }
     #temp-container {
-        width: 218px;
+        width: 100%;
     }
     #hr{
         position: absolute;
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        left: 50.5%;
-        top: 190px;
-        width: 230px;
+        left: 1%;
+        top: 370px;
+        width: 98%;
     }
     #hr-container {
-        width: 218px;
+        width: 100%;
     }
     #spo2{
         position: absolute;
         background-color: var(--primarioOscuro);
         background-size: cover;
         background-position: center;
-        left: 50.5%;
-        top: 450px;
-        width: 230px;
+        left: 1%;
+        top: 605px;
+        width: 98%;
     }
     #sp-container {
-        width: 218px;
+        width: 100%;
     }
     #PPG {
         font-size: 0.7em;
@@ -799,7 +799,7 @@ ____________________*/
         padding: 5px;
         width: 200px;
         position: absolute;
-        top: 99%;
+        top: 820px;
         left: 0%;
         z-index: 100;
         color: white;
