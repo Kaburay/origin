@@ -15,41 +15,106 @@
     background-color: #0067ff;
   }
   #banner {
-    color: black;
+    color: rgba(0, 0, 0, 0.8);
     background-color: white;
   }
+  #ecg-container {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+}
   #temp {
-    color: black;
+    color: rgba(0, 0, 0, 0.8);
     background-color: white;
+  }
+  #temp-container {
+    color: white;
   }
   #hr {
-    color: black;
+    color: rgba(0, 0, 0, 0.8);
     background-color: white;
   }
   #spo2 {
-    color: black;
+    color: rgba(0, 0, 0, 0.8);
     background-color: white;
   }
   .loading {
     --speed-of-animation: 0.9s;
     --gap: 6px;
-    --first-color: black;
-    --second-color: black;
-    --third-color: black;
-    --fourth-color: black;
-    --fifth-color: black;
+    --first-color: rgba(0, 0, 0, 0.8);
+    --second-color: rgba(0, 0, 0, 0.8);
+    --third-color: rgba(0, 0, 0, 0.8);
+    --fourth-color: rgba(0, 0, 0, 0.8);
+    --fifth-color: rgba(0, 0, 0, 0.8);
    }
-  .material-symbols-outlined {
-    color: black;
+
+   .loading2 {
+    --speed-of-animation: 0.9s;
+    --gap: 6px;
+    --first-color: white;
+    --second-color: white;
+    --third-color: white;
+    --fourth-color: white;
+    --fifth-color: white;
+   }
+  .icon {
+    filter: invert(30%) sepia(10%) saturate(200%) hue-rotate(0deg) brightness(70%);
   }
   #batabase {
-    color: black;
+    color: rgba(0, 0, 0, 0.8);
   }
 
-  .content-table { border-collapse: collapse; margin: 25px 0; font-size: 1em; font-family: sans-serif; min-width: 550px; box-shadow: 0 0 20px rgba(0, 0, 0, 2); }
-  .content-table thead tr { background-color: #828283; color: black; text-align: middle; }
-  .content-table th, .content-table td { padding: 12px 15px; }
-  .content-table tbody tr { border-bottom: 1px solid #635c5ca1; } .content-table tbody tr:nth-of-type(even) { background-color: white; } .content-table tbody tr:last-of-type { border-bottom: 2px solid black; }
+  .content-table {
+    border-collapse: collapse;
+    margin: 1px 0;
+    font-size: 0.5em;
+    font-family: sans-serif;
+    width: 90%; /* Ajustar ancho total de la tabla */
+    box-shadow: 0 0 26px rgba(0, 0, 0, 0.15);
+  }
+
+  .content-table thead tr {
+      background-color: #7c7c7c;
+      color: #ffffff;
+      text-align: middle;
+  }
+
+  .content-table th, .content-table td {
+      padding: 8px 2px; /* Espaciado interno para mayor legibilidad */
+  }
+
+  /* Especificar ancho para cada columna */
+  .content-table th:nth-child(1),
+  .content-table td:nth-child(1) {
+      width: 10px; /* Ancho de la columna de Temperatura */
+  }
+
+  .content-table th:nth-child(2),
+  .content-table td:nth-child(2) {
+      width: 10px; /* Ancho de la columna de SpO2 */
+  }
+
+  .content-table th:nth-child(3),
+  .content-table td:nth-child(3) {
+      width: 10px; /* Ancho de la columna de BPM */
+  }
+
+  .content-table th:nth-child(4),
+  .content-table td:nth-child(4) {
+      width: 150px; /* Ancho de la columna de Fecha y Hora */
+  }
+
+  .content-table tbody tr {
+      border-bottom: 1px solid #dddddd;
+  }
+
+  .content-table tbody tr:nth-of-type(even) {
+      background-color: #d4d4d4;
+  }
+
+  .content-table tbody tr:last-of-type {
+      border-bottom: 2px solid #ffffff;
+  }
 
   nav .mobile .header {
     color: black;
